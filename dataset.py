@@ -6,7 +6,7 @@ import numpy as np
 
 class PhotoMonetDataset(Dataset):
     def __init__(
-        self, root_dir_photo: str, root_dir_monet: str, transform: None
+        self, root_dir_photo: str, root_dir_monet: str, transform=None
     ) -> None:
         self.root_dir_monet = root_dir_monet
         self.root_dir_photo = root_dir_photo
@@ -24,18 +24,20 @@ class PhotoMonetDataset(Dataset):
 
     def __getitem__(self, idx):
         # it might happen that the index goes beyond and we get out of index error so to solve this we do modular division
-        monet_image = self.monet_images[idx % self.monet_dataset_length]
-        photo = self.photos[idx % self.photo_dataset_length]
+        single_monet_image = self.monet_images[idx % self.monet_dataset_length]
+        single_photo = self.photos[idx % self.photo_dataset_length]
 
         # the above is name of image only
-        monet_image_path = os.path.join(self.root_dir_monet, monet_image)
-        photo_path = os.path.join(self.root_dir_photo, photo)
+        monet_complete_path = os.path.join(self.root_dir_monet, single_monet_image)
+        photo_complete_path = os.path.join(self.root_dir_photo, single_photo)
 
-        monet_image = np.array(Image.open(monet_image_path).convert("RGB"))
-        photo = np.array(Image.open(photo).convert("RGB"))
-
+        monet_image_arr = np.array(Image.open(monet_complete_path).convert("RGB"))
+        photo_image_arr = np.array(Image.open(photo_complete_path).convert("RGB"))
         if self.transform:
-            augmentations = self.transform(image=monet_image, image0=photo)
-            photo = augmentations["image0"]
-            monet_image = augmentations["image"]
+            augmentations = self.transform(
+                image=monet_image_arr, image0=photo_image_arr
+            )
+            photo_image_arr = augmentations["image0"]
+            monet_image_arr = augmentations["image"]
 
+        return photo_image_arr, monet_image_arr

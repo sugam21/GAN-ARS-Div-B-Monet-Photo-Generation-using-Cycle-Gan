@@ -1,8 +1,6 @@
 import torch.nn as nn
 import torch
-from typing import List
 from torch import Tensor
-from torch.nn.modules import InstanceNorm2d, ReLU6
 
 
 class ConvBlock(nn.Module):
@@ -12,7 +10,7 @@ class ConvBlock(nn.Module):
         output_channel: int,
         is_down_sampling: bool = True,
         is_use_activation: bool = True,
-        **kwargs
+        **kwargs,
     ) -> None:
         super().__init__()
         self.conv = nn.Sequential(
@@ -21,7 +19,7 @@ class ConvBlock(nn.Module):
                     in_channels=input_channel,
                     out_channels=output_channel,
                     padding_mode="reflect",
-                    **kwargs
+                    **kwargs,
                 )
                 if is_down_sampling
                 else nn.ConvTranspose2d(
@@ -127,12 +125,9 @@ class Generator(nn.Module):
 
     def forward(self, x) -> Tensor:
         x = self.initial(x)
-
         for layer in self.down_blocks:
             x = layer(x)
-
         x = self.residual_blocks(x)
-
         for layer in self.up_blocks:
             x = layer(x)
         x = self.last(x)
@@ -140,10 +135,11 @@ class Generator(nn.Module):
 
 
 def test():
-    x = torch.randn(1, 3, 256, 256)
+    x = torch.randn(1, 3, 126, 126)
     model = Generator()
     prediction = model.forward(x)
-    print(prediction.shape)
+    print(f"Generator input shape: {x.shape}")
+    print(f"Generator output shape: {prediction.shape}")
 
 
 if __name__ == "__main__":

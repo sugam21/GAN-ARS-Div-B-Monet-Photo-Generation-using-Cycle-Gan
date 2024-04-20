@@ -72,7 +72,7 @@ class Discriminator(nn.Module):
             nn.Sequential(
                 nn.Conv2d(
                     in_channels=input_channels,
-                    out_channels=1,
+                    out_channels=3,
                     kernel_size=4,
                     stride=1,
                     padding=1,
@@ -91,11 +91,11 @@ class Discriminator(nn.Module):
 
 
 def test():
-    x = torch.randn(5, 3, 256, 256)
+    x = torch.randn(1, 3, 256, 256)
     model = Discriminator()
     prediction = model.forward(x)
-    print(model)
-    print(prediction.shape)
+    print(f"Discriminator input shape: {x.shape}")
+    print(f"Discriminator output shape: {prediction.shape}")
 
 
 if __name__ == "__main__":

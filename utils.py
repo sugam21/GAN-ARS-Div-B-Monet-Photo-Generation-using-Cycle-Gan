@@ -5,18 +5,25 @@ import numpy as np
 import config
 
 
-def save_checkpoint(model, optimizer, filename="my_checkpoint.pth.tar"):
+def save_checkpoint(model, optimizer, filepath: str, filename="my_checkpoint.pth.tar"):
     print("=> Saving checkpoint")
     checkpoint = {
         "state_dict": model.state_dict(),
         "optimizer": optimizer.state_dict(),
     }
-    torch.save(checkpoint, filename)
+    checkpoint_file_complete_path = os.path.join(filepath, filename)
+
+    # If path does not exists create one
+    if not (os.path.exists(filepath)):
+        os.mkdir(filepath)
+
+    torch.save(checkpoint, checkpoint_file_complete_path)
 
 
-def load_checkpoint(checkpoint_file, model, optimizer, lr):
+def load_checkpoint(checkpoint_file, model, optimizer, filepath: str, lr):
     print("=> Loading checkpoint")
-    checkpoint = torch.load(checkpoint_file, map_location=config.DEVICE)
+    checkpoint_file_complete_path = os.path.join(filepath, checkpoint_file)
+    checkpoint = torch.load(checkpoint_file_complete_path, map_location=config.DEVICE)
     model.load_state_dict(checkpoint["state_dict"])
     optimizer.load_state_dict(checkpoint["optimizer"])
 
