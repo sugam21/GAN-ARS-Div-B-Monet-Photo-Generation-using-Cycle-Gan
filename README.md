@@ -34,9 +34,6 @@ Contributions are welcome! If you have any ideas for improvements or find any is
 ## Credits
 This project is inspired by the original CycleGAN paper by Jun-Yan Zhu et al. ([arXiv:1703.10593](https://arxiv.org/abs/1703.10593)).
 
-## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
 ## Acknowledgments
 Special thanks to the developers of CycleGAN and the open-source community for their contributions.
 
